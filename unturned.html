@@ -2,7 +2,10 @@
 <head>
 <title>Unturned PJOG.DE Event Server</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<!-- jquery -->
+<script>
+if (window.location.protocol != "https:")
+    window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+</script>
 <scipt src="jquery.js"></scipt>
 
 <!-- Latest compiled and minified CSS -->
