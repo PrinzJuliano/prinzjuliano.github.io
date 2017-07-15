@@ -1,3 +1,7 @@
+if (window.location.protocol !== 'https:' && !window.location.hostname.includes("localhost")) {
+    window.location = 'https://' + window.location.hostname + window.location.pathname + window.location.hash;
+}
+
 
 // Initialize Firebase
 var config = {
