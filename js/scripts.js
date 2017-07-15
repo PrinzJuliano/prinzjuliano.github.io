@@ -37,6 +37,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if(!emailVerified)
     {
+    	user.sendEmailVerification()
     	alert("Your email address is not verified!\nCheck your email account!")
     }
 
@@ -363,6 +364,17 @@ function emailAuth(){
 		$('#emailUserAuthModal').modal("hide")
 	}).catch(function(error) {
 	  // Handle Errors here.
+	  var errorCode = error.code;
+	  var errorMessage = error.message;
+	  alert(errorCode + ":\n" + errorMessage)
+	});
+}
+
+function emailReset(){
+	var email = $('#reset_email').val()
+	firebase.auth().sendPasswordResetEmail(email).then(function() {
+	  $('#resetPasswordModal').modal("hide")
+	}, function(error) {
 	  var errorCode = error.code;
 	  var errorMessage = error.message;
 	  alert(errorCode + ":\n" + errorMessage)
