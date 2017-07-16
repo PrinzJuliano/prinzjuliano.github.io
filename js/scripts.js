@@ -52,11 +52,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 //LOAD the pictures that are not pending
-database.ref("/files/").once('value').then(function(snapshot){
+database.ref("/files/added/").once('value').then(function(snapshot){
 	for(key in snapshot.val()){
-		if(snapshot.val()[key].type == "added"){
-			pictures.push(snapshot.val()[key])
-		}
+		pictures.push(snapshot.val()[key])
 	}
 	var numberOfTabs = pictures.length / picsPerPage
 	$('#pageSelect').append("<li><a href='#' onclick='showPage("+(offset-1)+")'>Prev</a></li>")
@@ -171,7 +169,6 @@ function upload(){
 	var metadata = {
 		author: (account.displayName || account.email),
 		title: title,
-		type: "pending"
 	}
 
 	if(!file.type.includes("image"))
@@ -194,8 +191,8 @@ function getBase64(file, metadata) {
 	reader.onload = function () {
 		metadata.data = reader.result;
    		//do the work
-   		var key = database.ref().child("files").push().key
-   		database.ref("files/" + key).set(metadata).then(function(){
+   		var key = database.ref().child("/files/pending").push().key
+   		database.ref("/files/pending/" + key).set(metadata).then(function(){
 
    			$('#upload_title').val("")
    			$('#files').val("")
@@ -210,7 +207,6 @@ function getBase64(file, metadata) {
    		} else {
    			$('#helpTextUpload').html(error);
    		}
-   		return
    		return -1;
    	};
 }
@@ -225,7 +221,9 @@ function googleLogin(){
 
 	var provider = new firebase.auth.GoogleAuthProvider();
 
-	firebase.auth().signInWithRedirect(provider);
+	firebase.auth().signInWithRedirect(provider).catch(function(error){
+		firebase.auth().signInWithPopup(provider)
+	});
 
 }
 
